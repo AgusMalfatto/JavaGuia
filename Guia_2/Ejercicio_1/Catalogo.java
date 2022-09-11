@@ -1,4 +1,5 @@
-package Ejercicios_Resueltos.Guia_2.Ejercicio_1;
+//package Ejercicios_Resueltos.JavaGuia.Guia_2.Ejercicio_1;
+
 import java.util.*;
 import javax.swing.*;
 
@@ -32,6 +33,22 @@ public class Catalogo {
         dataBase.add(film);
     }
 
+    public void ConsultarDVD()
+    {
+    	String name = JOptionPane.showInputDialog(null, "Ingrese el nombre de la película", 
+        "Consulta", JOptionPane.QUESTION_MESSAGE);
+        DVD dvd = getDVD(name);
+
+        if(dvd != null)
+        {
+            dvd.showDVD("Película: " + dvd.getName());
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "No se ha encontrado el registro: '" + name + "'");
+        }
+    }
+    
     public void modificarDVD()
     {
         String name = JOptionPane.showInputDialog(null, "Ingrese el nombre de la película a modificar", 
@@ -81,7 +98,7 @@ public class Catalogo {
 
     public void list()
     {
-        String [] option = {"Todos los DVDs", "Mi catálogo", "Volver"};
+        String [] option = {"Todos los DVDs", "Mi catálogo", "DVDs por tiempo", "DVDs por Director", "DVDs por títulos", "Volver"};
         int selection = JOptionPane.showOptionDialog(null, "¿Qué desea listar?", "Listado", JOptionPane.YES_NO_OPTION,
         JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 
@@ -93,18 +110,82 @@ public class Catalogo {
             case 1:
                 showCatalog();
                 break;
+            case 2:
+            	break;
+            case 3:
+            	break;
+            case 4:
+            	showTitleList();
+            	break;
         }
     }
-
+        
+    private void showTitleList()
+    {
+    	String [] names = new String[getSize()];
+    	
+    	for(int i = 0; i < getSize(); i++)
+    	{
+    		names[i] = dataBase.get(i).getName();
+    	}
+    	
+    	for(int i = 1; i < getSize(); i++)
+    	{
+    		String aux = names[i];
+    		int j = i - 1;
+    		while(j >= 0 && (aux.compareTo(names[j]) < 0))
+			{
+    			names[j + 1] = names[j];
+    			j--;
+			}
+    		names[j + 1] = aux;    		
+    	}
+    	
+    	showTitleListSorted(names);
+    	
+    }
+    
+    private void showTitleListSorted(String [] names)
+    {
+    	for(int i = 0; i < getSize(); i++)
+    	{
+    		DVD film = getDVD(names[i]);
+    		JOptionPane.showMessageDialog(null, 
+    				"Nombre: " + film.getName() +
+    				"\nDirector: " + film.getDirector() +
+    				"\nGénero: " + film.getGender() +
+    				"\nDuración: " + film.getTime() +
+    				"\nEn Stock: " + film.getHave() +
+    				"\nComentario: " + film.getComment()
+    				);
+    	}
+    }
+    
+    private static String formatString (String msg)
+    {
+    	if (msg.length() > 20)
+    		return msg.substring(0, 21);
+    	else
+    	{
+    		int espacios = 20 - msg.length();
+    		for (int i = 1; i <= espacios; i++)
+    			msg = msg + " ";
+    	    return msg;
+    	}
+    }
+    
     public void showDataBase()
     {
-        String cadena = "";
+    	
+    	
+    	String info = "";
         for(int i = 0; i < dataBase.size(); i++)
         {
-            cadena += ("\n" + dataBase.get(i).getName() + "  |  " + dataBase.get(i).getGender() + "  |  " + dataBase.get(i).getTime() + 
-            "  |  " + dataBase.get(i).getHave() + "  |  " + dataBase.get(i).getComment());
+        	info += (String.format("%20s | %20s | %-15d | %-15b | %-15s \n", 
+        			formatString(dataBase.get(i).getName()), formatString((dataBase.get(i).getGender()).toString()), 
+        			dataBase.get(i).getTime(), dataBase.get(i).getHave(), formatString(dataBase.get(i).getComment())));
         }
-        JOptionPane.showMessageDialog(null, cadena);
+        JOptionPane.showMessageDialog(null, info);
     }
 
     public void showCatalog()

@@ -1,4 +1,5 @@
-package Ejercicios_Resueltos.Guia_2.Ejercicio_1;
+//package Ejercicios_Resueltos.JavaGuia.Guia_2.Ejercicio_1;
+
 import javax.swing.JOptionPane;
 
 enum Gender
@@ -56,6 +57,7 @@ public class DVD
         
         this.time = Integer.parseInt(timestr);
     }
+    
     public int getTime(){return this.time;}
 
     public void setHave(String message)
@@ -88,12 +90,10 @@ public class DVD
 
     public void showDVD(String message)
     {
+    	String info = String.format("Nombre %.15s \n Género: %.15s \n Duración: %.15s \n Lo tengo: %.15b \n Comentario: %.15s", 
+    			getName(), getGender(), getTime(), getHave(), getComment());
         JOptionPane.showMessageDialog(null, 
-        "Nombre: " + getName() +
-        "\nGénero: " + getGender() +
-        "\nDuración: " + getTime() + 
-        "\nLo tengo: " + getHave() +
-        "\nComentario: " +getComment(),
+        info,
         message, JOptionPane.INFORMATION_MESSAGE
         );
     }
