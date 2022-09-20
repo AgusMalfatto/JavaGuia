@@ -6,6 +6,7 @@ import javax.swing.*;
 public class Catalogo {
     private ArrayList<DVD> dataBase = new ArrayList<>();
 
+
     public void Actions()
     {
         String [] option = {"Añadir DVD", "Modificar DVD", "Eliminar DVD", "Volver"};
@@ -111,15 +112,33 @@ public class Catalogo {
                 showCatalog();
                 break;
             case 2:
+            	boolean timeAux = false;
+                String timestr;
+                int time;
+
+                do
+                {
+                    timestr = JOptionPane.showInputDialog(null, "Ingrese el tiempo a filtrar: ");
+
+                    timeAux = timestr.matches("[+-]?\\d*(\\.\\d+)?");
+
+                }while(!timeAux);
+                
+                time = Integer.parseInt(timestr);
+                showTitleTime(time);
+                
             	break;
             case 3:
+            	String name = JOptionPane.showInputDialog("Ingrese el nombre del director a filtrar: ");
+            	showTitleDirector(name);
+            	
             	break;
             case 4:
             	showTitleList();
             	break;
         }
     }
-        
+
     private void showTitleList()
     {
     	String [] names = new String[getSize()];
@@ -158,6 +177,28 @@ public class Catalogo {
     				"\nEn Stock: " + film.getHave() +
     				"\nComentario: " + film.getComment()
     				);
+    	}
+    }
+    
+    private void showTitleTime(int time)
+    {
+    	for(int i = 0; i < getSize(); i++)
+    	{
+    		if(dataBase.get(i).getTime() < time)
+    		{
+    			dataBase.get(i).showDVD("Película: " + dataBase.get(i).getName());
+    		}
+    	}
+    }
+    
+    private void showTitleDirector(String name)
+    {
+    	for(int i = 0; i < getSize(); i++)
+    	{
+    		if(dataBase.get(i).getDirector().equals(name))
+    		{
+    			dataBase.get(i).showDVD("La película es: " + dataBase.get(i).getName());
+    		}
     	}
     }
     
